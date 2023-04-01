@@ -1,57 +1,49 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+
+
 export const cartSlice = createSlice({
   name: "cart",
-  initialState: {
-    data: [],
-    count: 0,
-    totalamt: 0,
+  initialState:{
+  data: [],
+  count: 0,
+  totalamt: 0,
   },
   reducers: {
-    addItem: (state, payload) => {
-      if (state.count <= 0) {
-        state.data.push(payload.payload);
+    addItem: (state, action) => {
+      const index = state.data.findIndex((item) => item._id === action.payload._id);
+      if (index >= 0) {
+        state.data[index].qty += 1;
+      } else {
+        const tempdata = { ...action.payload, qty: 1 };
+        state.data.push(tempdata);
         state.count += 1;
-      } else
-        for (var i = 0; i < state.data.length; i++) {
-          if (state.data[i].id == payload.payload.id) {
-            state.data[i].quantity += 1;
-          } else {
-            state.data.push(payload.payload);
-            state.count += 1;
-          }
-        }
+      }
 
-      state.totalamt = state.totalamt + payload.payload.price;
+      state.totalamt = state.totalamt + action.payload.price;
     },
 
     //Remove Item from the cart
-    removeItem: (state, payload) => {
-      state.totalamt -= payload.payload.price * payload.payload.quantity;
-      const newdata = state.data.filter((item) => {
-        item.id !== payload.payload.id;
-      });
+    removeItem:(state, action) => {
+      const index = state.data.findIndex((item) => item._id === action.payload._id);
+      state.data.splice(index,1)
       state.count -= 1;
-      state.data = newdata;
+      state.totalamt -= action.payload.price * action.payload.quantity;
     },
 
     //Decrease Item count
-    decreaseItem: (state, payload) => {
-      for (var i = 0; i < state.data.length; i++) {
-        if (state.data[i].quantity > 1) {
-          if (state.data[i].id == payload.payload.id) {
-            state.data[i].quantity -= 1;
-          }
-        } else {
-          const newdata = state.data.filter((item) => {
-            item.id !== payload.payload.id;
-          });
-          state.count -= 1;
-          state.data = newdata;
-        }
+    decreaseItem: (state, action) => {
+      const index = state.data.findIndex((item) => item._id === action.payload._id);
+      // console.log(state.data[index].id);
+      if(state.data[index].qty>1)
+      {
+          state.data[index].qty -= 1;
+      }else{
+        state.data.splice(index, 1);
+        state.count -= 1;
       }
 
-      state.totalamt = state.totalamt - payload.payload.price;
+      state.totalamt = state.totalamt - action.payload.price;
     },
   },
 });
