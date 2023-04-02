@@ -13,7 +13,7 @@ export default function home({data}){
 
 export async function getServerSideProps() {
   // Fetch data from external API
-  const res = await fetch(`${process.env.MY_URL}/api/product/show`);
+  const res = await fetch(`${process.env.NEXT_PUBLIC_MY_URL}/api/product/show`);
   const data = await res.json();
   return { props: { data } };
 }

@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  value:"hidden"
+  value: "hidden",
 };
 
 export const cartvisibility = createSlice({
@@ -9,19 +9,15 @@ export const cartvisibility = createSlice({
   initialState,
   reducers: {
     hide: (state) => {
-      // Redux Toolkit allows us to write "mutating" logic in reducers. It
-      // doesn't actually mutate the state because it uses the Immer library,
-      // which detects changes to a "draft state" and produces a brand new
-      // immutable state based off those changes
-      state.value ="hidden";
+      state.value = "hidden";
     },
-    show:(state)=>{
-        state.value="flex";
+    show: (state) => {
+      state.value = "flex";
     },
-    change:(state)=>{
-      if ((state.value == "hidden")) state.value = "flex";
-      else if ((state.value == "flex")) state.value = "hidden";
-    }
+    change: (state) => {
+      if (state.value == "hidden") state.value = "flex";
+      else if (state.value == "flex") state.value = "hidden";
+    },
   },
 });
 
