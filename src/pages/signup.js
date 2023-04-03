@@ -13,6 +13,11 @@ export default function Example() {
     if (e.target.name === "password") setpassword(e.target.value);
     if (e.target.name === "name") setname(e.target.value);
   };
+  const [showPassword, setShowPassword] = useState("password");
+  const passwordVisibility = () => {
+    if (showPassword === "password") setShowPassword("text");
+    else setShowPassword("password");
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -22,7 +27,7 @@ export default function Example() {
         "Content-type": "application/json",
       },
       body: JSON.stringify({
-        name:name,
+        name: name,
         email: email,
         password: password,
       }),
@@ -30,9 +35,10 @@ export default function Example() {
 
     const data = await res.json();
     console.log(data);
-    if(data.success)
-    {
-        router.replace('/')
+    if (data.success) {
+      console.log(data);
+      localStorage.setItem("isActive", data.success);
+      router.replace("/");
     }
   };
 
@@ -88,7 +94,7 @@ export default function Example() {
                   value={password}
                   onChange={handleChange}
                   name="password"
-                  type="password"
+                  type={showPassword}
                   autoComplete="current-password"
                   required
                   className="relative block w-full rounded-b-md border-0 py-1.5 px-4 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -103,6 +109,7 @@ export default function Example() {
                   id="show-password"
                   name="remember-me"
                   type="checkbox"
+                  onChange={passwordVisibility}
                   className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
                 />
                 <label htmlFor="show-password" className="ml-2 block text-sm text-gray-900">

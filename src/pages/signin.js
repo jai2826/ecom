@@ -1,8 +1,10 @@
 import { useRouter } from "next/router";
+import Link from "next/link";
 import { LockClosedIcon } from "@heroicons/react/20/solid";
 import { useState } from "react";
 import { disableButton } from "../features/user/isActive";
 import { useDispatch, useSelector } from "react-redux";
+
 
 export default function Example() {
   const router = useRouter();
@@ -10,6 +12,13 @@ export default function Example() {
   const [password, setpassword] = useState("");
   const dispatch = useDispatch();
 
+  const [showPassword, setShowPassword] = useState("password")
+  const passwordVisibility = ()=>{
+    if(showPassword === "password")
+    setShowPassword("text")
+    else 
+    setShowPassword("password")
+  }
   const handleChange = (e) => {
     if (e.target.name === "email") setemail(e.target.value);
     if (e.target.name === "password") setpassword(e.target.value);
@@ -29,9 +38,9 @@ export default function Example() {
     });
 
     const data = await res.json();
-    if (data !== null) {
-      console.log(data);
+    if (data.success) {
       localStorage.setItem("isActive", data.success);
+      dispatch(disableButton({ success: data.success }));
       router.replace("/");
     }
   };
@@ -72,7 +81,7 @@ export default function Example() {
                   value={password}
                   onChange={handleChange}
                   name="password"
-                  type="password"
+                  type={showPassword}
                   autoComplete="current-password"
                   required
                   className="relative block w-full rounded-b-md border-0 py-1.5 px-4 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -87,6 +96,7 @@ export default function Example() {
                   id="show-password"
                   name="remember-me"
                   type="checkbox"
+                  onChange={passwordVisibility}
                   className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
                 />
                 <label htmlFor="show-password" className="ml-2 block text-sm text-gray-900">
@@ -112,6 +122,11 @@ export default function Example() {
                 </span>
                 Sign in
               </button>
+            </div>
+            <div className="text-sm text-center">
+              <Link href="/signup" className="font-medium text-indigo-600 hover:text-indigo-500">
+                Create a Account
+              </Link>
             </div>
           </form>
         </div>

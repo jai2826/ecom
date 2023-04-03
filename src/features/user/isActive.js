@@ -3,18 +3,20 @@ import { createSlice } from "@reduxjs/toolkit";
 export const CheckActive = createSlice({
   name: "Active",
   initialState: {
-    value: "block",
-    // SigninShow: true,
+    signIn: "block",
+    signOut:"hidden"
   },
   reducers: {
     disableButton: (state, action) => {
       console.log(action);
       if (action.payload !== null) {
         if (action.payload.success) {
-          state.value = "hidden";
+          state.signIn = "hidden";
+          state.signOut = "block";
           // state.SigninShow = false;
         } else if (!action.payload.success) {
-          state.value = "block";
+          state.signIn = "block";
+          state.signOut = "hidden";
           // state.SigninShow = true;
         }
       }
